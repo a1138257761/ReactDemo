@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<script src="ajax.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    window.onload=function(){
+
+
+
+        sub1.onclick=function(){
+            ajax({
+                url:'/ajx',
+                data:{
+                    username:user.value,
+                    password:pass.value,
+                    act:'login'
+                },
+                success:function(res){
+                    console.log("前端接收到了nodejs处理后的数据",res)
+                }
+            })
+        }
+
+        sub2.onclick=function(){
+            ajax({
+                url:'/ajx',
+                data:{
+                    username:user.value,
+                    password:pass.value,
+                    act:'reg'
+                },
+                success:function(res){
+                    console.log("前端接收到了nodejs处理后的数据",res)
+                }
+            })
+        }
+
+
+
+    };
+</script>
+<body>
+用户名: <input type="text" value="" id="user"><br>
+密码: <input type="text" value="" id="pass"><br>
+<input type="button" id="sub1" value="ajax get登录">
+<input type="button" id="sub2" value="ajax post注册">
+
+</body>
+</html>

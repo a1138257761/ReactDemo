@@ -1,0 +1,238 @@
+һ:detail.js
+
+import React, { Component } from 'react';
+import NavBar from './NavBar'
+import Search from './Search'
+import FootBar from './FootBar'
+import '../assets/js/cookie'
+import {NavLink} from 'react-router-dom'
+// import {connect} from 'react-redux'
+// import asyncAction from '../store/asyncAction';
+
+
+class Detail extends Component{
+    constructor(props){
+        super();
+        this.state={
+            detail:{}
+        }
+    };
+    //���빺�ﳵ�ĵط�
+    lookfor(){
+        this.setCookie(this.props.match.params.id,this.props.match.params.id,10)
+    }
+    setCookie(name,value,t){
+        var d = new Date();
+        d.setDate(d.getDate()+t);
+        document.cookie = name+"="+value+";expires=" + d;
+    }
+
+    componentDidMount(){
+        let id = this.props.match.params.id;
+        console.log(id)
+        fetch('http://localhost:3000/list',{credentials:'include'}).then(
+            res => res.json()
+        ).then((data)=>{
+            this.setState({detail:data[id-1]})
+        })
+    }
+    render(){
+        return(
+            <React.Fragment>
+                <NavBar/>
+                <Search/>
+                <div className="xiangqing">
+                    <div className="neirong w">
+                        <div className="xiaomi6 fl">{this.state.detail.name}</div>
+                        <nav className="fr">
+                            <li><a href="">����</a></li>
+                            <li>|</li>
+                            <li><a href="">�佹˫��</a></li>
+                            <li>|</li>
+                            <li><a href="">���</a></li>
+                            <li>|</li>
+                            <li><a href="">����</a></li>
+                            <li>|</li>
+                            <li><a href="">F��ͨ��</a></li>
+                            <li>|</li>
+                            <li><a href="">�û�����</a></li>
+                            <div className="clear"></div>
+                        </nav>
+                        <div className="clear"></div>
+                    </div>
+                </div>
+                <div className="jieshao mt20 w">
+                    <div className="left fl"><img src={this.state.detail.src} alt=''/></div>
+                    <div className="right fr">
+                        <div className="h3 ml20 mt20">{this.state.detail.name}</div>
+                        <div className="jianjie mr40 ml20 mt10">{this.state.detail.content}
+                        </div>
+                        <div className="jiage ml20 mt10">{this.state.detail.price}.00Ԫ</div>
+                        <div className="ft20 ml20 mt20">ѡ��汾</div>
+                        <div className="xzbb ml20 mt10">
+                            <div className="banben fl">
+                                <a>
+                                    <span>ȫ��ͨ�� 6GB+64GB </span>
+                                    <span>2499Ԫ</span>
+                                </a>
+                            </div>
+                            <div className="banben fr">
+                                <a>
+                                    <span>ȫ��ͨ�� 6GB+128GB</span>
+                                    <span>2899Ԫ</span>
+                                </a>
+                            </div>
+                            <div className="clear"></div>
+                        </div>
+                        <div className="ft20 ml20 mt20">ѡ����ɫ</div>
+                        <div className="xzbb ml20 mt10">
+                            <div className="banben">
+                                <a>
+                                    <span className="yuandian"></span>
+                                    <span className="yanse">����ɫ</span>
+                                </a>
+                            </div>
+
+                        </div>
+                        <div className="xqxq mt20 ml20">
+                            <div className="top1 mt10">
+                                <div className="left1 fl">{this.state.detail.content}</div>
+                                <div className="right1 fr">{this.state.detail.price}.00Ԫ</div>
+                                <div className="clear"></div>
+                            </div>
+                            <div className="bot mt20 ft20 ftbc">�ܼƣ�{this.state.detail.price}Ԫ</div>
+                        </div>
+                        <div className="xiadan ml20 mt20">
+                            <input className="jrgwc" type="button" name="jrgwc" value="����ѡ��"/>
+                            <NavLink to='/GoodsCar'><input className="jrgwc" type="button" name="jrgwc" value="���빺�ﳵ" onClick={this.lookfor.bind(this)} /></NavLink>
+                        </div>
+                    </div>
+                    <div className="clear"></div>
+                </div>
+                <FootBar/>
+            </React.Fragment>
+        )
+    }
+}
+
+export default Detail;
+
+
+��.GoodsCar.js
+import React, {Component} from 'react';
+import '../assets/css/style.css'
+import FootBar from './FootBar'
+
+
+class GoodsCar extends Component{
+    constructor(props){
+        super(props);
+        this.state={
+            list:[],
+            detail:[],
+            num:0
+        };
+
+    }
+
+    componentDidMount(){
+        this.state.list.map((val,index)=>{
+            console.log(1)
+            this.state.num+=this.state.detail[val-1].price
+            this.setState({num:this.state.num})
+            console.log(this.state.num)
+        })
+    }
+
+    componentDidMount(){
+        var str = document.cookie;
+        let arr = [];
+        var arr1 = str.split("; ");
+        var newArr=[]
+        for (var i=0; i<arr1.length;i++){
+            newArr.push(arr1[i].split("="));
+            arr.push(newArr[i][0])
+        }
+        this.state.list=arr;
+        console.log(this.state.list);
+        fetch('http://localhost:3000/list').then(
+            res => res.json()
+        ).then((data)=>{
+            this.setState({detail:data})
+            console.log(this.state.detail)
+        });
+
+    }
+
+    render(){
+        return(
+            <div>
+                <div className="banner_x center">
+                    <a href="./index.html" target="_blank">
+                        <div className="logo fl"></div>
+                    </a>
+                    <div className="wdgwc fl ml40">�ҵĹ��ﳵ</div>
+                    <div className="wxts fl ml20">��ܰ��ʾ����Ʒ�Ƿ���ɹ����������µ�Ϊ׼Ŷ���뾡�����</div>
+                    <div className="dlzc fr">
+                        <ul>
+                            <li><a href="./login.html" target="_blank">��¼</a></li>
+                            <li>|</li>
+                            <li><a href="./register.html" target="_blank">ע��</a></li>
+                        </ul>
+
+                    </div>
+                    <div className="clear"></div>
+                </div>
+                <div className="xiantiao"></div>
+                <div className="gwcxqbj">
+                    <div className="gwcxd center">
+                        <div className="top2 center">
+                            <div className="sub_top fl">
+                                <input type="checkbox" value="quanxuan" className="quanxuan"/>ȫѡ
+                            </div>
+                            <div className="sub_top fl">��Ʒ����</div>
+                            <div className="sub_top fl">����</div>
+                            <div className="sub_top fl">����</div>
+                            <div className="sub_top fl">С��</div>
+                            <div className="sub_top fr">����</div>
+                            <div className="clear"></div>
+                        </div>
+
+                        {
+                            this.state.list.map((val,index)=>{
+                                return <div className="content2 center" key={index}>
+                                    <div className="sub_content fl ">
+                                        <input type="checkbox" value="quanxuan" className="quanxuan"/>
+                                    </div>
+                                    <div className="sub_content fl"><img src={this.state.detail[val-1].src} alt=''/></div>
+                                    <div className="sub_content fl ft20">{this.state.detail[val-1].name}</div>
+                                    <div className="sub_content fl ">{this.state.detail[val-1].price}Ԫ</div>
+                                    <div className="sub_content fl">
+                                        <input className="shuliang" type="number" defaultValue="1" step="1" min="1"/>
+                                    </div>
+                                    <div className="sub_content fl">{this.state.detail[val-1].price}Ԫ</div>
+                                    <div className="sub_content fl"><a href="">��</a></div>
+                                    <div className="clear"></div>
+                                </div>
+                            })
+                        }
+
+                    </div>
+                    <div className="jiesuandan mt20 center">
+                        <div className="jiesuan fr">
+                            <div className="jiesuanjiage fl">�ϼƣ������˷ѣ���<span>{this.state.num}.00Ԫ</span></div>
+                            <div className="jsanniu fr"><input className="jsan" type="submit" name="jiesuan"
+                                                               value="ȥ����"/></div>
+                            <div className="clear"></div>
+                        </div>
+                        <div className="clear"></div>
+                    </div>
+
+                </div>
+                <FootBar/>
+            </div>
+        )
+    }
+}
+
+export default GoodsCar;
